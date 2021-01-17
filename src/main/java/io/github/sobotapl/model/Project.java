@@ -18,6 +18,9 @@ public class Project {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project") //do pola
     private Set<ProjectStep> steps;
 
+    public Project() {
+    }
+
     public int getId() {
         return id;
     }
