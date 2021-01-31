@@ -5,7 +5,6 @@ import io.github.sobotapl.model.*;
 import io.github.sobotapl.model.projection.GroupReadModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,7 +26,7 @@ class ProjectServiceTest {
         TaskGroupRepository mockGroupRepository = groupRepositoryReturning(true);
         TaskConfigurationProperties mockConfig = configurationReturning(false);
         //system under testing
-        var toTest = new ProjectService(null, mockGroupRepository, mockConfig);
+        var toTest = new ProjectService(null, mockGroupRepository, null, mockConfig);
 
         //when
         var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
@@ -46,7 +44,7 @@ class ProjectServiceTest {
 
         TaskConfigurationProperties mockConfig = configurationReturning(true);
         //system under testing
-        var toTest = new ProjectService(mockRepository, null, mockConfig);
+        var toTest = new ProjectService(mockRepository, null, null,  mockConfig);
 
         //when
         var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
@@ -67,7 +65,7 @@ class ProjectServiceTest {
         // and
         TaskConfigurationProperties mockConfig = configurationReturning(true);
         //system under testing
-        var toTest = new ProjectService(mockRepository, null, mockConfig);
+        var toTest = new ProjectService(mockRepository, null, null, mockConfig);
 
         //when
         var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
@@ -88,11 +86,12 @@ class ProjectServiceTest {
         when(mockRepository.findById(anyInt())).thenReturn(Optional.of(project));
         //and
         InMemoryGroupRepository inMemoryGroupRepo = inMemoryGroupRepository();
+        var serviceWithInMemRepo = dummyGroupService(inMemoryGroupRepo);
         int countBeforeCall = inMemoryGroupRepo.count();
         //and
         TaskConfigurationProperties mockConfig = configurationReturning(true);
         //system under test
-        var toTest = new ProjectService(mockRepository, inMemoryGroupRepo, mockConfig);
+        var toTest = new ProjectService(mockRepository, inMemoryGroupRepo,serviceWithInMemRepo, mockConfig);
 
         //when
         GroupReadModel result = toTest.createGroup(today, 1);
@@ -104,6 +103,11 @@ class ProjectServiceTest {
         assertThat(countBeforeCall+1).isEqualTo(inMemoryGroupRepo.count());
 
     }
+
+    private TaskGroupService dummyGroupService(InMemoryGroupRepository inMemoryGroupRepo) {
+        return new TaskGroupService(inMemoryGroupRepo, null );
+    }
+
     private Project projectWith(String projectDescription, Set <Integer> daysToDeadline){
         Set<ProjectStep> steps = daysToDeadline.stream()
                 .map(days -> {
