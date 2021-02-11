@@ -1,9 +1,6 @@
 package io.github.sobotapl.logic;
 import io.github.sobotapl.TaskConfigurationProperties;
-import io.github.sobotapl.model.Task;
-import io.github.sobotapl.model.TaskGroup;
-import io.github.sobotapl.model.TaskGroupRepository;
-import io.github.sobotapl.model.TaskRepository;
+import io.github.sobotapl.model.*;
 import io.github.sobotapl.model.projection.GroupReadModel;
 import io.github.sobotapl.model.projection.GroupWriteModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +25,13 @@ public class TaskGroupService {
         this.taskRepository = taskRepository;
     }
 
-    public GroupReadModel createGroup (GroupWriteModel source){
-        TaskGroup result = repository.save(source.toGroup());
+    public GroupReadModel createGroup (final GroupWriteModel source){
+        return createGroup(source, null);
+
+    }
+
+    GroupReadModel createGroup(GroupWriteModel source, Project project) {
+        TaskGroup result = repository.save(source.toGroup(project));
         return new GroupReadModel(result);
     }
 
@@ -47,5 +49,6 @@ public class TaskGroupService {
         result.setDone(!result.isDone());
         repository.save(result);
     }
+
 
 }

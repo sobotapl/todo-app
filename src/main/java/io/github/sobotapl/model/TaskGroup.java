@@ -1,5 +1,7 @@
 package io.github.sobotapl.model;
 
+import net.minidev.json.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -47,6 +49,7 @@ public class TaskGroup {
     public void setDone(boolean done) {
         this.done = done;
     }
+
 
     public Set<Task> getTasks() {
         return tasks;

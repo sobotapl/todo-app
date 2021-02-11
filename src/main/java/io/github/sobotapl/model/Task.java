@@ -1,4 +1,6 @@
 package io.github.sobotapl.model;
+import net.minidev.json.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -28,13 +30,14 @@ public class Task {
         this(description, deadline, null);
     }
 
-    public Task(String description, LocalDateTime deadline, TaskGroup group){
+    public Task(String description, LocalDateTime deadline, TaskGroup group) {
         this.description = description;
         this.deadline = deadline;
-        if (group != null){
+        if (group != null) {
             this.group = group;
         }
     }
+
 
     public int getId() {
         return id;
@@ -69,11 +72,11 @@ public class Task {
     }
 
 
-    public TaskGroup getGroup() {
+    TaskGroup getGroup() {
         return group;
     }
 
-    public void setGroup(TaskGroup group) {
+    void setGroup(final TaskGroup group) {
         this.group = group;
     }
 
@@ -82,7 +85,6 @@ public class Task {
         done = source.done;
         deadline = source.deadline;
         group = source.group;
-
     }
 
 
