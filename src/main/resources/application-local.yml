@@ -6,7 +6,7 @@ spring:
     url: 'jdbc:h2:file:F:/todo-app/todo-db'
   jpa:
     hibernate:
-     ddl-auto: create-drop
+     ddl-auto: validate
 management:
   endpoints:
     web:

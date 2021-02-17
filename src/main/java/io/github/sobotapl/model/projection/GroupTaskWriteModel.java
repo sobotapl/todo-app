@@ -2,10 +2,12 @@ package io.github.sobotapl.model.projection;
 import io.github.sobotapl.model.Task;
 import io.github.sobotapl.model.TaskGroup;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class GroupTaskWriteModel {
 
+    @NotBlank(message = "Task's descriptin must be not null or empty")
     private String description;
     private LocalDateTime deadline;
 
